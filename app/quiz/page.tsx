@@ -27,7 +27,6 @@ function QuizContent() {
     };
     if (categories) fetchQuiz();
   }, [categories]);
-  console.log(quiz);
   const handleUserAnswer = (choiceIndex: number) => {
     setQuiz((prevQuiz) =>
       prevQuiz.map((q, qIndex) => {
