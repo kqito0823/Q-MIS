@@ -20,6 +20,7 @@ function QuizContent() {
   const [quiz, setQuiz] = useState<Quiz[]>([]);
   const [wrongCnt, setWrongCnt] = useState<number>(0);
   const [correctCnt, setCorrectCnt] = useState<number>(0);
+  const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -43,12 +44,18 @@ function QuizContent() {
         };
       }),
     );
-    if (quiz[displayQuiz].choices[choiceIndex].isCorrect) {
-      setCorrectCnt(correctCnt + 1);
+
+    const isCorrect = quiz[displayQuiz].choices[choiceIndex].isCorrect;
+    if (isCorrect) {
+      setCorrectCnt((prev) => prev + 1);
     } else {
-      setWrongCnt(wrongCnt + 1);
+      setWrongCnt((prev) => prev + 1);
     }
+
+    setFeedback(isCorrect ? "correct" : "wrong");
+    setTimeout(() => setFeedback(null), 400);
   };
+
   const current = quiz[displayQuiz];
   const correctRate =
     correctCnt + wrongCnt == 0
@@ -92,8 +99,17 @@ function QuizContent() {
                 </p>
               </div>
             )}
-            {/* 問題カード */}
-            <div className="relative bg-white rounded-2xl border border-gray-200 px-6 py-8 sm:px-8 flex flex-col gap-6">
+            <div
+              className={`relative bg-white rounded-2xl border px-6 py-8 sm:px-8 flex flex-col gap-6
+                transition-all duration-300 ease-out
+                ${
+                  feedback === "correct"
+                    ? " border-blue-400 ring-4 ring-blue-100 bg-blue-50/40"
+                    : feedback === "wrong"
+                      ? " border-red-300 ring-4 ring-red-100 bg-red-50/40"
+                      : " border-gray-200 ring-0"
+                }`}
+            >
               <p className="text-[17px] leading-relaxed font-semibold text-gray-900">
                 {current.q}
               </p>
@@ -107,7 +123,7 @@ function QuizContent() {
                       return (
                         <div
                           key={i}
-                          className={`flex items-center justify-between gap-3 px-5 py-3.5 rounded-lg border text-sm transition-colors
+                          className={`flex items-center justify-between gap-3 px-5 py-3.5 rounded-lg border text-sm transition-all duration-300
                           ${
                             isCorrect
                               ? "border-blue-500 bg-blue-50/60 text-gray-900"
@@ -158,7 +174,10 @@ function QuizContent() {
             {/* ナビゲーション */}
             <div className="flex items-center justify-between">
               <button
-                onClick={() => setDisplayQuiz((prev) => prev - 1)}
+                onClick={() => {
+                  setFeedback(null);
+                  setDisplayQuiz((prev) => prev - 1);
+                }}
                 disabled={displayQuiz === 0}
                 className="px-6 py-2.5 rounded-lg text-sm font-semibold text-gray-500 bg-white border border-gray-200 transition-all
               hover:border-gray-900 hover:text-gray-900
@@ -168,7 +187,10 @@ function QuizContent() {
               </button>
 
               <button
-                onClick={() => setDisplayQuiz((prev) => prev + 1)}
+                onClick={() => {
+                  setFeedback(null);
+                  setDisplayQuiz((prev) => prev + 1);
+                }}
                 disabled={displayQuiz === quiz.length - 1}
                 className="px-7 py-2.5 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 transition-all
               hover:shadow-lg hover:shadow-blue-500/20 active:scale-[0.97]
@@ -188,7 +210,6 @@ function QuizContent() {
   );
 }
 
-// ページコンポーネントはSuspenseでラップするだけ
 export default function QuizPage() {
   return (
     <Suspense
