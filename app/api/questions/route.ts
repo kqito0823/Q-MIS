@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   if (category != "all"){
     categoryId = Number(category);
   }
-  console.log(categoryId)
+  
   const question = await prisma.question.findMany({
     orderBy: { id: 'asc' },
     where: category === "all" ? {} : { categoryId },

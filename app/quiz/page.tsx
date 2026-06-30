@@ -18,6 +18,8 @@ function QuizContent() {
   const categories = searchParams.get("categories") ?? "";
   const [displayQuiz, setDisplayQuiz] = useState<number>(0);
   const [quiz, setQuiz] = useState<Quiz[]>([]);
+  const [wrongCnt, setWrongCnt] = useState<number>(0);
+  const [correctCnt, setCorrectCnt] = useState<number>(0);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -27,6 +29,7 @@ function QuizContent() {
     };
     if (categories) fetchQuiz();
   }, [categories]);
+
   const handleUserAnswer = (choiceIndex: number) => {
     setQuiz((prevQuiz) =>
       prevQuiz.map((q, qIndex) => {
@@ -40,13 +43,22 @@ function QuizContent() {
         };
       }),
     );
+    if (quiz[displayQuiz].choices[choiceIndex].isCorrect) {
+      setCorrectCnt(correctCnt + 1);
+    } else {
+      setWrongCnt(wrongCnt + 1);
+    }
   };
   const current = quiz[displayQuiz];
+  const correctRate =
+    correctCnt + wrongCnt == 0
+      ? 0
+      : Math.round((correctCnt / (correctCnt + wrongCnt)) * 100);
 
   return (
-    <>
+    <div className="bg-gray-100">
       {current ? (
-        <div className="min-h-screen bg-white px-4 py-10 sm:px-6">
+        <div className=" bg-white px-4 py-10 sm:px-6">
           <div className="max-w-xl mx-auto flex flex-col gap-7">
             {/* 進捗バー */}
             <div className="flex items-center gap-4">
@@ -63,7 +75,23 @@ function QuizContent() {
                 {String(quiz.length).padStart(2, "0")}
               </span>
             </div>
-
+            {/* 正答率 */}
+            {(correctCnt !== 0 || wrongCnt !== 0) && (
+              <div className="flex gap-5 text-sm font-semibold text-gray-600">
+                <p>
+                  正解数 <span className="text-gray-900">{correctCnt}</span>
+                  <span className="text-gray-400">
+                    /{correctCnt + wrongCnt}
+                  </span>
+                </p>
+                <p>
+                  正答率{" "}
+                  <span className="text-blue-600">
+                    {correctRate.toFixed(0)}%
+                  </span>
+                </p>
+              </div>
+            )}
             {/* 問題カード */}
             <div className="relative bg-white rounded-2xl border border-gray-200 px-6 py-8 sm:px-8 flex flex-col gap-6">
               <p className="text-[17px] leading-relaxed font-semibold text-gray-900">
@@ -71,6 +99,7 @@ function QuizContent() {
               </p>
 
               <div className="flex flex-col gap-2">
+                {/*回答済みかどうか*/}
                 {current.choices.some((item) => item.userAnswer === true)
                   ? current.choices.map((choice, i) => {
                       const isCorrect = choice.isCorrect;
@@ -155,7 +184,7 @@ function QuizContent() {
           問題制作中。。。
         </div>
       )}
-    </>
+    </div>
   );
 }
 

@@ -25,6 +25,7 @@ export default function Home() {
     };
     fetchData();
   }, []);
+
   return (
     <>
       {category.length > 0 ? (
@@ -35,13 +36,13 @@ export default function Home() {
 
             <div className="flex items-center gap-2 mb-4">
               <span className="px-2.5 py-1 rounded-md bg-blue-50 text-blue-600 text-[11px] font-semibold tracking-[0.15em] uppercase border border-blue-200">
-                Mini Test
+                経営情報システム論
               </span>
-              <span className="text-gray-400 text-xs">経営情報システム論</span>
+              <span className="text-gray-400 text-xs">Mini Test</span>
             </div>
 
             <h1 className="text-[26px] sm:text-3xl font-bold text-gray-900 tracking-tight mb-4">
-              一問一答
+              一問一答道場
               <span className="ml-2 text-base font-normal text-gray-400">
                 / Quiz
               </span>
@@ -68,6 +69,7 @@ export default function Home() {
           <div>
             <p className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-3">
               Category
+              <span className="ml-5">一つ選択してください</span>
             </p>
             <div className="flex flex-wrap gap-2">
               {/* すべて */}
@@ -84,7 +86,7 @@ export default function Home() {
                 <label
                   htmlFor="-1"
                   className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg border border-gray-200 bg-white text-gray-500 text-sm font-medium cursor-pointer transition-all
-                hover:border-gray-900 hover:text-gray-900
+                hover:border-gray-900 hover:text-gray-500
                 peer-checked:border-gray-900 peer-checked:bg-gray-900 peer-checked:text-white
                 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-blue-400"
                 >
@@ -107,7 +109,7 @@ export default function Home() {
                   <label
                     htmlFor={d.id}
                     className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg border border-gray-200 bg-white text-gray-500 text-sm font-medium cursor-pointer transition-all
-                  hover:border-gray-900 hover:text-gray-900
+                  hover:border-gray-900 hover:text-gray-500
                   peer-checked:border-gray-900 peer-checked:bg-gray-900 peer-checked:text-white
                   peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-blue-400"
                   >
