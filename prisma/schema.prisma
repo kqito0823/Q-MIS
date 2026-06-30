@@ -21,6 +21,7 @@ model Question {
   id         Int      @id @default(autoincrement())
   q          String
   categoryId Int      @map("category_id")
+  explaining String?  @db.Text
   choices    Choice[]
   category   Category @relation(fields: [categoryId], references: [id])
 

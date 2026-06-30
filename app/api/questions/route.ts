@@ -10,11 +10,11 @@ export async function GET(req: NextRequest) {
   if (category != "all"){
     categoryId = Number(category);
   }
-  
+
   const question = await prisma.question.findMany({
     orderBy: { id: 'asc' },
     where: category === "all" ? {} : { categoryId },
-    select: { id: true, q: true, choices:{select:{id: true, text:true,isCorrect:true}}}
+    select: { id: true, q: true, explaining: true , choices:{select:{id: true, text:true,isCorrect:true}}}
   })
 
   // 配列をシャッフル
@@ -35,6 +35,5 @@ export async function GET(req: NextRequest) {
       )
     }))
   );
-  console.log(data)
   return NextResponse.json(data)
 }

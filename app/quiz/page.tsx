@@ -5,6 +5,7 @@ import { useEffect, useState, Suspense } from "react";
 interface Quiz {
   q: string;
   choices: Choice[];
+  explaining: string;
 }
 
 interface Choice {
@@ -170,6 +171,23 @@ function QuizContent() {
                     ))}
               </div>
             </div>
+
+            {current.choices.some((item) => item.userAnswer === true) &&
+              current.explaining && (
+                <div className="flex gap-3 px-5 py-4 rounded-lg bg-gray-50 border border-gray-200 animate-in fade-in slide-in-from-top-1 duration-300">
+                  <span className="shrink-0 w-6 h-6 rounded-full bg-gray-900 text-white text-[11px] font-bold flex items-center justify-center mt-0.5">
+                    ?
+                  </span>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[11px] font-bold text-gray-400 tracking-wide">
+                      解説
+                    </span>
+                    <p className="text-sm leading-relaxed text-gray-700 whitespace-pre-wrap">
+                      {current.explaining}
+                    </p>
+                  </div>
+                </div>
+              )}
 
             {/* ナビゲーション */}
             <div className="flex items-center justify-between">

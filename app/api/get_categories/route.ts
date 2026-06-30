@@ -8,6 +8,5 @@ export async function GET() {
     where: { isAvailable: true },
     select: { id: true, name: true,}
   })
-  console.log(categories)
   return NextResponse.json(categories)
 }

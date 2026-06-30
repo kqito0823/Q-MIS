@@ -40,18 +40,21 @@ export type QuestionMinAggregateOutputType = {
   id: number | null
   q: string | null
   categoryId: number | null
+  explaining: string | null
 }
 
 export type QuestionMaxAggregateOutputType = {
   id: number | null
   q: string | null
   categoryId: number | null
+  explaining: string | null
 }
 
 export type QuestionCountAggregateOutputType = {
   id: number
   q: number
   categoryId: number
+  explaining: number
   _all: number
 }
 
@@ -70,18 +73,21 @@ export type QuestionMinAggregateInputType = {
   id?: true
   q?: true
   categoryId?: true
+  explaining?: true
 }
 
 export type QuestionMaxAggregateInputType = {
   id?: true
   q?: true
   categoryId?: true
+  explaining?: true
 }
 
 export type QuestionCountAggregateInputType = {
   id?: true
   q?: true
   categoryId?: true
+  explaining?: true
   _all?: true
 }
 
@@ -175,6 +181,7 @@ export type QuestionGroupByOutputType = {
   id: number
   q: string
   categoryId: number
+  explaining: string | null
   _count: QuestionCountAggregateOutputType | null
   _avg: QuestionAvgAggregateOutputType | null
   _sum: QuestionSumAggregateOutputType | null
@@ -204,6 +211,7 @@ export type QuestionWhereInput = {
   id?: Prisma.IntFilter<"Question"> | number
   q?: Prisma.StringFilter<"Question"> | string
   categoryId?: Prisma.IntFilter<"Question"> | number
+  explaining?: Prisma.StringNullableFilter<"Question"> | string | null
   choices?: Prisma.ChoiceListRelationFilter
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
 }
@@ -212,6 +220,7 @@ export type QuestionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   q?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  explaining?: Prisma.SortOrderInput | Prisma.SortOrder
   choices?: Prisma.ChoiceOrderByRelationAggregateInput
   category?: Prisma.CategoryOrderByWithRelationInput
 }
@@ -223,6 +232,7 @@ export type QuestionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.QuestionWhereInput | Prisma.QuestionWhereInput[]
   q?: Prisma.StringFilter<"Question"> | string
   categoryId?: Prisma.IntFilter<"Question"> | number
+  explaining?: Prisma.StringNullableFilter<"Question"> | string | null
   choices?: Prisma.ChoiceListRelationFilter
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
 }, "id">
@@ -231,6 +241,7 @@ export type QuestionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   q?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  explaining?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.QuestionCountOrderByAggregateInput
   _avg?: Prisma.QuestionAvgOrderByAggregateInput
   _max?: Prisma.QuestionMaxOrderByAggregateInput
@@ -245,10 +256,12 @@ export type QuestionScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Question"> | number
   q?: Prisma.StringWithAggregatesFilter<"Question"> | string
   categoryId?: Prisma.IntWithAggregatesFilter<"Question"> | number
+  explaining?: Prisma.StringNullableWithAggregatesFilter<"Question"> | string | null
 }
 
 export type QuestionCreateInput = {
   q: string
+  explaining?: string | null
   choices?: Prisma.ChoiceCreateNestedManyWithoutQuestionInput
   category: Prisma.CategoryCreateNestedOneWithoutQuestionsInput
 }
@@ -257,11 +270,13 @@ export type QuestionUncheckedCreateInput = {
   id?: number
   q: string
   categoryId: number
+  explaining?: string | null
   choices?: Prisma.ChoiceUncheckedCreateNestedManyWithoutQuestionInput
 }
 
 export type QuestionUpdateInput = {
   q?: Prisma.StringFieldUpdateOperationsInput | string
+  explaining?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   choices?: Prisma.ChoiceUpdateManyWithoutQuestionNestedInput
   category?: Prisma.CategoryUpdateOneRequiredWithoutQuestionsNestedInput
 }
@@ -270,6 +285,7 @@ export type QuestionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   q?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.IntFieldUpdateOperationsInput | number
+  explaining?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   choices?: Prisma.ChoiceUncheckedUpdateManyWithoutQuestionNestedInput
 }
 
@@ -277,16 +293,19 @@ export type QuestionCreateManyInput = {
   id?: number
   q: string
   categoryId: number
+  explaining?: string | null
 }
 
 export type QuestionUpdateManyMutationInput = {
   q?: Prisma.StringFieldUpdateOperationsInput | string
+  explaining?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type QuestionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   q?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.IntFieldUpdateOperationsInput | number
+  explaining?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type QuestionListRelationFilter = {
@@ -303,6 +322,7 @@ export type QuestionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   q?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  explaining?: Prisma.SortOrder
 }
 
 export type QuestionAvgOrderByAggregateInput = {
@@ -314,12 +334,14 @@ export type QuestionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   q?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  explaining?: Prisma.SortOrder
 }
 
 export type QuestionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   q?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  explaining?: Prisma.SortOrder
 }
 
 export type QuestionSumOrderByAggregateInput = {
@@ -374,6 +396,10 @@ export type QuestionUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.QuestionScalarWhereInput | Prisma.QuestionScalarWhereInput[]
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type QuestionCreateNestedOneWithoutChoicesInput = {
   create?: Prisma.XOR<Prisma.QuestionCreateWithoutChoicesInput, Prisma.QuestionUncheckedCreateWithoutChoicesInput>
   connectOrCreate?: Prisma.QuestionCreateOrConnectWithoutChoicesInput
@@ -390,12 +416,14 @@ export type QuestionUpdateOneRequiredWithoutChoicesNestedInput = {
 
 export type QuestionCreateWithoutCategoryInput = {
   q: string
+  explaining?: string | null
   choices?: Prisma.ChoiceCreateNestedManyWithoutQuestionInput
 }
 
 export type QuestionUncheckedCreateWithoutCategoryInput = {
   id?: number
   q: string
+  explaining?: string | null
   choices?: Prisma.ChoiceUncheckedCreateNestedManyWithoutQuestionInput
 }
 
@@ -432,10 +460,12 @@ export type QuestionScalarWhereInput = {
   id?: Prisma.IntFilter<"Question"> | number
   q?: Prisma.StringFilter<"Question"> | string
   categoryId?: Prisma.IntFilter<"Question"> | number
+  explaining?: Prisma.StringNullableFilter<"Question"> | string | null
 }
 
 export type QuestionCreateWithoutChoicesInput = {
   q: string
+  explaining?: string | null
   category: Prisma.CategoryCreateNestedOneWithoutQuestionsInput
 }
 
@@ -443,6 +473,7 @@ export type QuestionUncheckedCreateWithoutChoicesInput = {
   id?: number
   q: string
   categoryId: number
+  explaining?: string | null
 }
 
 export type QuestionCreateOrConnectWithoutChoicesInput = {
@@ -463,6 +494,7 @@ export type QuestionUpdateToOneWithWhereWithoutChoicesInput = {
 
 export type QuestionUpdateWithoutChoicesInput = {
   q?: Prisma.StringFieldUpdateOperationsInput | string
+  explaining?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.CategoryUpdateOneRequiredWithoutQuestionsNestedInput
 }
 
@@ -470,27 +502,32 @@ export type QuestionUncheckedUpdateWithoutChoicesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   q?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.IntFieldUpdateOperationsInput | number
+  explaining?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type QuestionCreateManyCategoryInput = {
   id?: number
   q: string
+  explaining?: string | null
 }
 
 export type QuestionUpdateWithoutCategoryInput = {
   q?: Prisma.StringFieldUpdateOperationsInput | string
+  explaining?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   choices?: Prisma.ChoiceUpdateManyWithoutQuestionNestedInput
 }
 
 export type QuestionUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   q?: Prisma.StringFieldUpdateOperationsInput | string
+  explaining?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   choices?: Prisma.ChoiceUncheckedUpdateManyWithoutQuestionNestedInput
 }
 
 export type QuestionUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   q?: Prisma.StringFieldUpdateOperationsInput | string
+  explaining?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -528,6 +565,7 @@ export type QuestionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   q?: boolean
   categoryId?: boolean
+  explaining?: boolean
   choices?: boolean | Prisma.Question$choicesArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.QuestionCountOutputTypeDefaultArgs<ExtArgs>
@@ -537,6 +575,7 @@ export type QuestionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   q?: boolean
   categoryId?: boolean
+  explaining?: boolean
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["question"]>
 
@@ -544,6 +583,7 @@ export type QuestionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   q?: boolean
   categoryId?: boolean
+  explaining?: boolean
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["question"]>
 
@@ -551,9 +591,10 @@ export type QuestionSelectScalar = {
   id?: boolean
   q?: boolean
   categoryId?: boolean
+  explaining?: boolean
 }
 
-export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "q" | "categoryId", ExtArgs["result"]["question"]>
+export type QuestionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "q" | "categoryId" | "explaining", ExtArgs["result"]["question"]>
 export type QuestionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   choices?: boolean | Prisma.Question$choicesArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -576,6 +617,7 @@ export type $QuestionPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     id: number
     q: string
     categoryId: number
+    explaining: string | null
   }, ExtArgs["result"]["question"]>
   composites: {}
 }
@@ -1004,6 +1046,7 @@ export interface QuestionFieldRefs {
   readonly id: Prisma.FieldRef<"Question", 'Int'>
   readonly q: Prisma.FieldRef<"Question", 'String'>
   readonly categoryId: Prisma.FieldRef<"Question", 'Int'>
+  readonly explaining: Prisma.FieldRef<"Question", 'String'>
 }
     
 
