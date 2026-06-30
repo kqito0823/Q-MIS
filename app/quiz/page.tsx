@@ -1,27 +1,33 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
+import { useRouter } from "next/navigation";
+import { discoverValidationDepths } from "next/dist/server/app-render/instant-validation/instant-validation";
 
 interface Quiz {
+  id: number;
   q: string;
   choices: Choice[];
   explaining: string;
 }
 
 interface Choice {
+  id: number;
   text: string;
   isCorrect: boolean;
   userAnswer: boolean;
 }
 
 function QuizContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const categories = searchParams.get("categories") ?? "";
   const [displayQuiz, setDisplayQuiz] = useState<number>(0);
   const [quiz, setQuiz] = useState<Quiz[]>([]);
-  const [wrongCnt, setWrongCnt] = useState<number>(0);
-  const [correctCnt, setCorrectCnt] = useState<number>(0);
+  const [wrong, setWrong] = useState<number[]>([]);
+  const [correct, setCorrect] = useState<number[]>([]);
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
+  const [toggleGrade, setToggleGrade] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -31,6 +37,12 @@ function QuizContent() {
     };
     if (categories) fetchQuiz();
   }, [categories]);
+
+  const handleEnd = () => {
+    if (window.confirm("クイズを終了しますか?進捗が失われます")) {
+      router.push(`/`);
+    }
+  };
 
   const handleUserAnswer = (choiceIndex: number) => {
     setQuiz((prevQuiz) =>
@@ -48,16 +60,23 @@ function QuizContent() {
 
     const isCorrect = quiz[displayQuiz].choices[choiceIndex].isCorrect;
     if (isCorrect) {
-      setCorrectCnt((prev) => prev + 1);
+      setCorrect((prev) => [...prev, quiz[displayQuiz].id]);
     } else {
-      setWrongCnt((prev) => prev + 1);
+      setWrong((prev) => [...prev, quiz[displayQuiz].id]);
     }
 
     setFeedback(isCorrect ? "correct" : "wrong");
     setTimeout(() => setFeedback(null), 400);
   };
 
+  const handleToggle = () => {
+    setToggleGrade((prev) => !prev);
+  };
+
   const current = quiz[displayQuiz];
+  const total = quiz.length;
+  const correctCnt = correct.length;
+  const wrongCnt = wrong.length;
   const correctRate =
     correctCnt + wrongCnt == 0
       ? 0
@@ -215,6 +234,112 @@ function QuizContent() {
               disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100 disabled:hover:shadow-none"
               >
                 次へ →
+              </button>
+            </div>
+
+            {/*全問達成 */}
+            {correctCnt + wrongCnt === total && (
+              <div className="flex flex-col gap-5 px-6 py-8 sm:px-8 rounded-2xl border border-gray-200 bg-gradient-to-br from-blue-50/60 to-purple-50/60">
+                <div className="flex flex-col items-center gap-1 text-center">
+                  <p className="text-lg font-bold text-gray-900">全問達成</p>
+                  <p className="text-sm font-semibold text-gray-500">
+                    おめでとう！！
+                  </p>
+                </div>
+
+                <div className="flex justify-center gap-6 text-sm font-semibold text-gray-600">
+                  <p>
+                    正解数 <span className="text-gray-900">{correctCnt}</span>
+                    <span className="text-gray-400">/{total}</span>
+                  </p>
+                  <p>
+                    正答率{" "}
+                    <span className="text-blue-600">
+                      {correctRate.toFixed(0)}%
+                    </span>
+                  </p>
+                </div>
+
+                <button
+                  onClick={handleToggle}
+                  className="flex items-center justify-center gap-1.5 text-xs font-semibold text-gray-400 hover:text-gray-700 transition-colors"
+                >
+                  成績の詳細を{toggleGrade ? "閉じる" : "見る"}
+                  <span
+                    className={`transition-transform duration-200 ${toggleGrade ? "rotate-180" : ""}`}
+                  >
+                    ▾
+                  </span>
+                </button>
+
+                {toggleGrade && (
+                  <div className="flex flex-col gap-5 animate-in fade-in slide-in-from-top-1 duration-300">
+                    <div className="flex flex-col gap-2">
+                      <p className="text-[11px] font-bold text-red-400 tracking-wide">
+                        間違えた問題 ({wrong.length})
+                      </p>
+                      <ul className="flex flex-col gap-2">
+                        {wrong.map((w) => {
+                          const q = quiz.find((item) => item.id === w);
+                          const answer = q?.choices.find((c) => c.isCorrect);
+                          return q ? (
+                            <li
+                              key={w}
+                              className="px-4 py-3 rounded-lg bg-white border border-red-200 text-sm text-gray-700 flex flex-col gap-1"
+                            >
+                              <p>{q.q}</p>
+                              <p className="text-xs font-semibold text-gray-400">
+                                答え:{" "}
+                                <span className="text-gray-900">
+                                  {answer?.text}
+                                </span>
+                              </p>
+                            </li>
+                          ) : null;
+                        })}
+                      </ul>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <p className="text-[11px] font-bold text-blue-400 tracking-wide">
+                        正解した問題 ({correct.length})
+                      </p>
+                      <ul className="flex flex-col gap-2">
+                        {correct.map((c) => {
+                          const q = quiz.find((item) => item.id === c);
+                          const answer = q?.choices.find(
+                            (choice) => choice.isCorrect,
+                          );
+                          return q ? (
+                            <li
+                              key={c}
+                              className="px-4 py-3 rounded-lg bg-white border border-blue-200 text-sm text-gray-700 flex flex-col gap-1"
+                            >
+                              <p>{q.q}</p>
+                              <p className="text-xs font-semibold text-gray-400">
+                                答え:{" "}
+                                <span className="text-gray-900">
+                                  {answer?.text}
+                                </span>
+                              </p>
+                            </li>
+                          ) : null;
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 終了ボタン */}
+            <div className="flex justify-center items-center ">
+              <button
+                onClick={handleEnd}
+                className="px-6 py-2.5 rounded-lg text-sm font-semibold text-gray-500 bg-white border border-gray-200 transition-all
+  hover:border-gray-900 hover:text-gray-900"
+              >
+                終わる
               </button>
             </div>
           </div>
