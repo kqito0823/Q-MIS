@@ -1,0 +1,38 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../app/generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  isAvailable Boolean    @default(false) @map("is_available")
+  questions   Question[]
+
+  @@map("categories")
+}
+
+model Question {
+  id         Int      @id @default(autoincrement())
+  q          String
+  categoryId Int      @map("category_id")
+  choices    Choice[]
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@map("questions")
+}
+
+model Choice {
+  id         Int      @id @default(autoincrement())
+  questionId Int      @map("question_id")
+  text       String
+  isCorrect  Boolean  @default(false) @map("is_correct")
+  question   Question @relation(fields: [questionId], references: [id])
+
+  @@map("choices")
+}

@@ -34,3 +34,50 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+```
+q-mis
+├─ AGENTS.md
+├─ app
+│  ├─ api
+│  │  └─ get_categories
+│  │     └─ route.ts
+│  ├─ favicon.ico
+│  ├─ generated
+│  ├─ globals.css
+│  ├─ layout.tsx
+│  └─ page.tsx
+├─ CLAUDE.md
+├─ data.csv
+├─ eslint.config.mjs
+├─ lib
+│  └─ prisma.ts
+├─ make_categories.py
+├─ make_questions_choices.py
+├─ next.config.ts
+├─ package-lock.json
+├─ package.json
+├─ postcss.config.mjs
+├─ prisma
+│  ├─ migrations
+│  │  ├─ 20260627124903_init
+│  │  │  └─ migration.sql
+│  │  ├─ 20260628011314_init
+│  │  │  └─ migration.sql
+│  │  ├─ 20260628012152_rename_table
+│  │  │  └─ migration.sql
+│  │  ├─ 20260629032654_snake_case_columns
+│  │  │  └─ migration.sql
+│  │  └─ migration_lock.toml
+│  └─ schema.prisma
+├─ prisma.config.ts
+├─ public
+│  ├─ file.svg
+│  ├─ globe.svg
+│  ├─ next.svg
+│  ├─ vercel.svg
+│  └─ window.svg
+├─ README.md
+└─ tsconfig.json
+
+```
