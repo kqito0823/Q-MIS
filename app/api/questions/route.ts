@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { NextRequest } from 'next/server';
 
+
 export async function GET(req: NextRequest) {
   const category = req.nextUrl.searchParams.get('category');
   let categoryId = 0
@@ -17,7 +18,7 @@ export async function GET(req: NextRequest) {
   })
 
   // 配列をシャッフル
-  function shuffle(array) {
+  function shuffle<T>(array: T[]): T[] {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
