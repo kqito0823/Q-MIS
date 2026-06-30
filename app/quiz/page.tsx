@@ -1,6 +1,6 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
 interface Quiz {
   q: string;
@@ -13,7 +13,7 @@ interface Choice {
   userAnswer: boolean;
 }
 
-export default function QuizPage() {
+function QuizContent() {
   const searchParams = useSearchParams();
   const categories = searchParams.get("categories") ?? "";
   const [displayQuiz, setDisplayQuiz] = useState<number>(0);
@@ -35,11 +35,12 @@ export default function QuizPage() {
       {current ? (
         <div>
           <p>{current.q}</p>
-          <ul>
-            {current.choices.map((choice, i) => (
-              <li key={i}>{choice.text}</li>
-            ))}
-          </ul>
+          {current.choices.map((choice, i) => (
+            <div key={i}>
+              <button>{choice.text}</button>
+              {choice.isCorrect && <p>正解</p>}
+            </div>
+          ))}
           <div>
             <button
               onClick={() => setDisplayQuiz((prev) => prev - 1)}
@@ -64,5 +65,20 @@ export default function QuizPage() {
         </div>
       )}
     </>
+  );
+}
+
+// ページコンポーネントはSuspenseでラップするだけ
+export default function QuizPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center text-gray-400 text-sm animate-pulse">
+          読み込み中…
+        </div>
+      }
+    >
+      <QuizContent />
+    </Suspense>
   );
 }
