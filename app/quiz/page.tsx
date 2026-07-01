@@ -337,7 +337,11 @@ function QuizContent() {
                   </div>
                 )}
                 {wrongCnt != 0 && (
-                  <button onClick={handleReanswer}>
+                  <button
+                    onClick={handleReanswer}
+                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-bold shadow-sm hover:bg-blue-700 active:scale-[0.98] transition-all duration-150"
+                  >
+                    <span className="text-base">↻</span>
                     間違えた問題をもう一度解く
                   </button>
                 )}

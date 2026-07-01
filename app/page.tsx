@@ -63,6 +63,17 @@ export default function Home() {
               <span className="w-1 h-1 rounded-full bg-pink-400" />
               簡素な作りではありますが、ぜひご利用いただけると光栄です♡
             </p>
+
+            <div className="mt-4 flex flex-col gap-2">
+              <p className="text-xs text-gray-500 flex items-start gap-1.5">
+                <span className="text-blue-400 leading-none mt-0.5">✓</span>
+                最後まで解き終わることで「間違えた問題をもう一度解く」ことができます
+              </p>
+              <p className="text-xs text-red-400 font-medium flex items-start gap-1.5 bg-red-50 border border-red-100 rounded-lg px-3 py-2 w-fit">
+                <span className="leading-none mt-0.5">⚠</span>
+                ページを再読み込みすると、解いていた情報がすべてなくなるのでご注意ください
+              </p>
+            </div>
           </div>
 
           {/* カテゴリ選択 */}
