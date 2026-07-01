@@ -2,7 +2,6 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { useRouter } from "next/navigation";
-import { discoverValidationDepths } from "next/dist/server/app-render/instant-validation/instant-validation";
 
 interface Quiz {
   id: number;
@@ -25,8 +24,8 @@ function QuizContent() {
   const categories = searchParams.get("categories") ?? "";
   const [displayQuiz, setDisplayQuiz] = useState<number>(0);
   const [quiz, setQuiz] = useState<Quiz[]>([]);
-  const [wrong, setWrong] = useState<number[]>([]);
-  const [correct, setCorrect] = useState<number[]>([]);
+  const [wrong, setWrong] = useState<Quiz[]>([]);
+  const [correct, setCorrect] = useState<Quiz[]>([]);
   const [feedback, setFeedback] = useState<"correct" | "wrong" | null>(null);
   const [toggleGrade, setToggleGrade] = useState<boolean>(false);
 
@@ -61,9 +60,9 @@ function QuizContent() {
 
     const isCorrect = quiz[displayQuiz].choices[choiceIndex].isCorrect;
     if (isCorrect) {
-      setCorrect((prev) => [...prev, quiz[displayQuiz].id]);
+      setCorrect((prev) => [...prev, quiz[displayQuiz]]);
     } else {
-      setWrong((prev) => [...prev, quiz[displayQuiz].id]);
+      setWrong((prev) => [...prev, quiz[displayQuiz]]);
     }
 
     setFeedback(isCorrect ? "correct" : "wrong");
@@ -74,6 +73,12 @@ function QuizContent() {
     setToggleGrade((prev) => !prev);
   };
 
+  const handleReanswer = () => {
+    setDisplayQuiz(0);
+    setQuiz(wrong);
+    setWrong([]);
+    setCorrect([]);
+  };
   const current = quiz[displayQuiz];
   const total = quiz.length;
   const correctCnt = correct.length;
@@ -284,14 +289,13 @@ function QuizContent() {
                       </p>
                       <ul className="flex flex-col gap-2">
                         {wrong.map((w) => {
-                          const q = quiz.find((item) => item.id === w);
-                          const answer = q?.choices.find((c) => c.isCorrect);
-                          return q ? (
+                          const answer = w.choices.find((c) => c.isCorrect);
+                          return (
                             <li
-                              key={w}
+                              key={w.id}
                               className="px-4 py-3 rounded-lg bg-white border border-red-200 text-sm text-gray-700 flex flex-col gap-1"
                             >
-                              <p>{q.q}</p>
+                              <p>{w.q}</p>
                               <p className="text-xs font-semibold text-gray-400">
                                 答え:{" "}
                                 <span className="text-gray-900">
@@ -299,7 +303,7 @@ function QuizContent() {
                                 </span>
                               </p>
                             </li>
-                          ) : null;
+                          );
                         })}
                       </ul>
                     </div>
@@ -310,16 +314,15 @@ function QuizContent() {
                       </p>
                       <ul className="flex flex-col gap-2">
                         {correct.map((c) => {
-                          const q = quiz.find((item) => item.id === c);
-                          const answer = q?.choices.find(
+                          const answer = c.choices.find(
                             (choice) => choice.isCorrect,
                           );
-                          return q ? (
+                          return (
                             <li
-                              key={c}
+                              key={c.id}
                               className="px-4 py-3 rounded-lg bg-white border border-blue-200 text-sm text-gray-700 flex flex-col gap-1"
                             >
-                              <p>{q.q}</p>
+                              <p>{c.q}</p>
                               <p className="text-xs font-semibold text-gray-400">
                                 答え:{" "}
                                 <span className="text-gray-900">
@@ -327,11 +330,16 @@ function QuizContent() {
                                 </span>
                               </p>
                             </li>
-                          ) : null;
+                          );
                         })}
                       </ul>
                     </div>
                   </div>
+                )}
+                {wrongCnt != 0 && (
+                  <button onClick={handleReanswer}>
+                    間違えた問題をもう一度解く
+                  </button>
                 )}
               </div>
             )}
