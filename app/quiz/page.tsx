@@ -7,8 +7,9 @@ import { discoverValidationDepths } from "next/dist/server/app-render/instant-va
 interface Quiz {
   id: number;
   q: string;
-  choices: Choice[];
+  categoryId: number;
   explaining: string;
+  choices: Choice[];
 }
 
 interface Choice {
@@ -132,6 +133,9 @@ function QuizContent() {
             >
               <p className="text-[17px] leading-relaxed font-semibold text-gray-900">
                 {current.q}
+              </p>
+              <p className="text-right text-xs text-gray-400">
+                第{current.categoryId}回
               </p>
 
               <div className="flex flex-col gap-2">
